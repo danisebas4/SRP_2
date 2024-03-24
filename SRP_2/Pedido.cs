@@ -1,27 +1,35 @@
 ﻿using System;
-
-namespace SISRP
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+namespace SRP_2
 {
     internal class Pedido
     {
         private int nro;
-        private Almuerzo [] alm;
-        private PlatoIndividual [] plInd;
-        private Bebida [] bebidas;
+        private List <Almuerzo> alm;
+        private List <PlatoIndividual> plInd;
+        private string platoEspecial;
+        private List <Bebida> bebidas;
         private double costoTotal;
-        public Pedido(int nro, Almuerzo [] alm, PlatoIndividual[] plInd, Bebida[] 
-            bebida, double costoTotal) {
+
+        public Pedido(int nro, List <Almuerzo> alm, List<PlatoIndividual> plInd, List<Bebida> 
+            bebida, string platoEspecial,double costoTotal) {
 
             this.alm = alm;
             this.plInd = plInd;
             this.bebidas = bebida;
+            this.platoEspecial = platoEspecial;
         }
         public double totalCosto()
         {
             double costoAlm = 0;
             double costoPlInt = 0;
             double costoBebida = 0;
-            for (int i = 0; i < this.alm.Length; i++)
+
+            for (int i = 0; i < this.alm.Count; i++)
             {
                 costoAlm = costoAlm + this.alm[i].Costo;
             }
@@ -39,5 +47,6 @@ namespace SISRP
             Console.WriteLine(nro + "");
             Console.ReadKey();
         }
+
     }
 }

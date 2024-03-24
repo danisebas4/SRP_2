@@ -7,6 +7,7 @@ using System.Windows.Forms;
 
 namespace SRP_2
 {
+    [Serializable]
     internal class MenuR
     {
         private Dictionary <string, double> sopas;

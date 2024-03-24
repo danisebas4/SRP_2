@@ -13,15 +13,19 @@ using System.Windows.Forms;
 
 namespace SRP_2
 {
-    public partial class Form1 : Form
+    public partial class Principal : Form
     {
         private MenuR menu;
-        public Form1()
+      
+        public Principal()
         {
 
             InitializeComponent();
 
-            menu = new MenuR();
+            menu = CargarMenu();
+            
+            establecerComboboxConMenu();
+            cargarListBox();
 
             // Crear una lista de personas (solo como ejemplo)
             List<Persona> personas = new List<Persona>
@@ -32,7 +36,7 @@ namespace SRP_2
             };
 
             // Asignar la lista de personas al DataGridView
-            dataGridView1.DataSource = personas;
+            RegistroPedidos.DataSource = personas;
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -65,10 +69,7 @@ namespace SRP_2
 
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
 
-        }
         public class Persona
         {
             public string Nombre { get; set; }
@@ -145,6 +146,7 @@ namespace SRP_2
         private void eliminarSegundos_Click(object sender, EventArgs e)
         {
             listaSegundos.Items.Clear();
+            this.menu.Segundos.Clear();
         }
 
         private void registrarPostre_Click(object sender, EventArgs e)
@@ -167,6 +169,7 @@ namespace SRP_2
         private void eliminarPostre_Click(object sender, EventArgs e)
         {
             listaPostres.Items.Clear();
+            this.menu.Postres.Clear();
         }
 
         private void registrarBebida_Click(object sender, EventArgs e)
@@ -189,6 +192,7 @@ namespace SRP_2
         private void eliminarListaBebidas_Click(object sender, EventArgs e)
         {
             listaBebidas.Items.Clear();
+            this.menu.Bebidas.Clear();
         }
 
         private void registrarEspeciales_Click(object sender, EventArgs e)
@@ -211,6 +215,7 @@ namespace SRP_2
         private void eliminarListaEsp_Click(object sender, EventArgs e)
         {
             listaEspeciales.Items.Clear();
+            this.menu.Especiales.Clear();
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -220,6 +225,20 @@ namespace SRP_2
 
         private void save_Click(object sender, EventArgs e)
         {
+            limpiarComboBoxes();
+            establecerComboboxConMenu();
+            guardarMenu();
+        }
+
+        public void limpiarComboBoxes()
+        {
+            lSopas.Items.Clear();
+            lSegundos.Items.Clear();
+            lBebidas.Items.Clear();
+            tipoPedido.Items.Clear();
+            lPostres.Items.Clear();    
+        }
+        public void establecerComboboxConMenu() {
             List<string> sopas = new List<string>(this.menu.Sopas.Keys);
             lSopas.Items.AddRange(sopas.ToArray());
 
@@ -235,6 +254,19 @@ namespace SRP_2
             List<string> especiales = new List<string>(this.menu.Especiales.Keys);
             tipoPedido.Items.AddRange(especiales.ToArray());
         }
+        public void cargarListBox() {
+            ReEstablecerListasBox(this.menu.Sopas, ListaSopas);
+            ReEstablecerListasBox(this.menu.Segundos, listaSegundos);
+            ReEstablecerListasBox(this.menu.Postres, listaPostres);
+            ReEstablecerListasBox(this.menu.Especiales, listaEspeciales);
+            ReEstablecerListasBox(this.menu.Bebidas, listaBebidas);
+        }
+        public void ReEstablecerListasBox(Dictionary <string, double> dic, ListBox a) {
+            foreach (var palabra in dic)
+            {
+                a.Items.Add($"{palabra.Key} {palabra.Value}");
+            }
+        }
         public void guardarMenu()
         {
          
@@ -243,28 +275,48 @@ namespace SRP_2
                 IFormatter formatter = new BinaryFormatter();
                 formatter.Serialize(fs, this.menu);
             }
-        }
+        } 
 
-        public Menu cargarMenu() {
-            
-            Menu menu = null;
-            if (File.Exists("menu.dat"))
+
+        private MenuR CargarMenu() {
+            try
             {
-                using (FileStream fs = new FileStream("menu.dat", FileMode.Open))
+                MenuR menu = new MenuR();
+                if (File.Exists("menu.dat"))
                 {
-                    IFormatter formatter = new BinaryFormatter();
-                    menu = (Menu)formatter.Deserialize(fs);
+                    using (FileStream fs = new FileStream("menu.dat", FileMode.Open))
+                    {
+                        IFormatter formatter = new BinaryFormatter();
+                        menu = (MenuR)formatter.Deserialize(fs);
+                    }
                 }
+                return menu;
             }
-            return menu;
+            catch(Exception ex) {
+                MessageBox.Show("Se ha producido un error: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            return new MenuR();
         }
         private void comboBox2_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             Console.WriteLine("");
         }
 
-     
+        private void Registrar_Click(object sender, EventArgs e)
+        {
 
+        }
+
+        
+        private void addElem_Click(object sender, EventArgs e)
+        {
+        
+        }
+
+        private void RegistroPedidos_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            
+        }
     }
 
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SISRP
+namespace SRP_2
 {
     internal class Almuerzo
     {
